@@ -41,7 +41,7 @@ app.use(session({
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         path: '/'
-    }, 
+    },
     store: MongoStore.create({
         mongoUrl: process.env.MONGODB_URI as string,
         collectionName: 'sessions'
