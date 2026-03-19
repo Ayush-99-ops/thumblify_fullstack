@@ -14,6 +14,24 @@ pipeline {
             }
         }
         
+        stage('Inject Environment Variables') {
+            steps {
+                /*
+                 * PRO-TIP FOR TOMORROW: 
+                 * In a real production app, you NEVER store .env files in Git or hardcode them here.
+                 * You securely store them in Jenkins using the "Credentials" page as "Secret Files".
+                 * This code tells Jenkins to perfectly inject those hidden files into your workspace right before building!
+                 */
+                withCredentials([
+                    file(credentialsId: 'client-env-secret', variable: 'CLIENT_ENV'),
+                    file(credentialsId: 'server-env-secret', variable: 'SERVER_ENV')
+                ]) {
+                    sh 'cp $CLIENT_ENV client/.env'
+                    sh 'cp $SERVER_ENV server/.env'
+                }
+            }
+        }
+        
         stage('Build Docker Containers') {
             steps {
                 /* 
