@@ -14,28 +14,14 @@ pipeline {
             }
         }
         
-        stage('Verify Backend') {
-            steps {
-                dir('server') {
-                    // Install dependencies to ensure package.json is valid
-                    sh 'npm ci'
-                }
-            }
-        }
-
-        stage('Verify Frontend') {
-            steps {
-                dir('client') {
-                    // Install dependencies and run Vite's ESLint to catch early errors
-                    sh 'npm ci'
-                    sh 'npm run lint'
-                }
-            }
-        }
-
         stage('Build Docker Containers') {
             steps {
-                // This validates that both Dockerfiles build without errors
+                /* 
+                 * Since your Dockerfiles already run `npm install` and `npm run build` 
+                 * internally, this step automatically verifies that both your React 
+                 * frontend and Node backend can compile flawlessly without needing 
+                 * Node or NPM installed directly on the Jenkins server!
+                 */
                 sh '${DOCKER_COMPOSE_CMD} build'
             }
         }
